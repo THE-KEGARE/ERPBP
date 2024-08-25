@@ -20,7 +20,10 @@
 
 ![img-example]
 
+<sub>"Примечание: данный скрипт находится в разработке, и его функциональность может измениться."</sub>
+
 <div align="left">
+
 
 <!-- Images -->
 [img-example]: <https://github.com/THE-KEGARE/ERPBP/blob/main/scr/images/menu_example.png>
