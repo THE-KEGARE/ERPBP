@@ -228,8 +228,10 @@ end)
 function main()
     while true do
         wait(0)
-        if wasKeyPressed(vk.VK_OEM_MINUS) then -- ## активируем окно нажатием кнопки "-"
-            window.show_main[0] = not window.show_main[0]
+        if not sampIsChatInputActive() and not sampIsDialogActive() and not isSampfuncsConsoleActive() then -- ## проверяем, что чат, диалог и консоль сампфункса не открыты в момент нажатия
+            if wasKeyPressed(vk.VK_OEM_MINUS) then -- ## активируем окно нажатием кнопки "-"
+                window.show_main[0] = not window.show_main[0]
+            end
         end
     end
 end
