@@ -7,6 +7,7 @@
 
 __name__ = ('Evolve RP Best Prices')
 __authors__ = ('Kegare & !chizusrevenge')
+__description__ = ('можешь добавить краткое описание скрипта сюда если хочешь')
 
 local imgui = require 'mimgui'
 local new = imgui.new
@@ -55,8 +56,8 @@ local function setupDarkRedTheme()
 end
 
 -- ## устанавливаем переменным размер окна по умолчанию
-local window_width = 180
-local window_height = 290
+local window_width = 337
+local window_height = 329
 
 -- ## координаты закусочных и их /gps
 local food_coords = {
@@ -124,18 +125,6 @@ end, function()
 
     if window.show_main[0] then
         imgui.Begin(string.upper(__name__), window.show_main, imgui.WindowFlags.NoCollapse) -- ## хеадер окна
-        if imgui.Button('Ближайшая закусочная') then
-            local closest_cmd = getClosestFood()
-            if closest_cmd then
-                sampSendChat(closest_cmd)
-            end
-        end        
-        
-        if imgui.Button('Ближайшая АЗС') then
-            -- Пока кнопка без функционала
-        end
-        
-        
         if imgui.CollapsingHeader('Еда') then
             imgui.Indent(10) -- ## добавляем отступ подкатегории
             setupSubHeaderStyle() -- ## применяем стиль подкатегории
@@ -152,7 +141,7 @@ end, function()
                 if imgui.Button('Установить метку##blueberry') then
                     sendGpsCommand('/gps 9 61')
                 end
-                imgui.Indent(-22) -- ## возвращаем отступ текста в исходное положение
+                imgui.Unindent(22) -- ## возвращаем отступ текста в исходное положение
             end
             
             -- ## подкатегория Financial Pizza
@@ -166,7 +155,7 @@ end, function()
                 if imgui.Button('Установить метку##financial') then
                     sendGpsCommand('/gps 9 25')
                 end
-                imgui.Indent(-22)
+                imgui.Unindent(22)
             end
             
             -- ## подкатегория Island Cluckin Bell
@@ -180,7 +169,7 @@ end, function()
                 if imgui.Button('Установить метку##island') then
                     sendGpsCommand('/gps 9 72')
                 end
-                imgui.Indent(-22)
+                imgui.Unindent(22)
             end
             
             -- ## подкатегория Spinybed Burger
@@ -194,7 +183,7 @@ end, function()
                 if imgui.Button('Установить метку##spinybed') then
                     sendGpsCommand('/gps 9 55')
                 end
-                imgui.Indent(-22)
+                imgui.Unindent(22)
             end
             imgui.Unindent(10) -- ## возвращаем отступ после подкатегории в исходное положение
         end
@@ -210,12 +199,25 @@ end, function()
             imgui.Unindent(10)
         end
 
+        imgui.Unindent(4) -- ## корректировка отступов
+        
+        if imgui.Button('Ближайшая закусочная') then
+            local closest_cmd = getClosestFood()
+            if closest_cmd then
+                sampSendChat(closest_cmd)
+            end
+        end        
+        
+        if imgui.Button('Ближайшая АЗС') then
+            -- Пока кнопка без функционала
+        end
+
         -- ## выводим текст в стиле подсказки
         imgui.TextDisabled('Info')
         if imgui.IsItemHovered() then -- ## показываем если курсор наведен
             imgui.BeginTooltip() -- ## начало блока подсказки
             imgui.PushTextWrapPos(450) -- ## минимальная ширина окна текста подсказки
-            imgui.TextUnformatted('Authors: ' .. __authors__)
+            imgui.TextUnformatted('Авторы: ' .. __authors__ .. '\nОписание: ' .. __description__)
             imgui.PopTextWrapPos() -- ## возвращаем текстовую ширину к исходной
             imgui.EndTooltip() -- ## конец блока
         end
@@ -229,6 +231,7 @@ function main()
     while true do
         wait(0)
         if not sampIsChatInputActive() and not sampIsDialogActive() and not isSampfuncsConsoleActive() then -- ## проверяем, что чат, диалог и консоль сампфункса не открыты в момент нажатия
+            sampRegisterChatCommand('bp', function() window.show_main[0] = not window.show_main[0] end) -- ## регистрируем команду
             if wasKeyPressed(vk.VK_OEM_MINUS) then -- ## активируем окно нажатием кнопки "-"
                 window.show_main[0] = not window.show_main[0]
             end
