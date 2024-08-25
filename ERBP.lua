@@ -2,6 +2,7 @@
   * chatgpt мне не помог, пришлось все переписывать самому
   * комментарии оставил тебе для удобства чтения кода
   * это на случай если захочешь сам что то добавить/изменить
+  * или же просто подметить что-то себе в будущем
 ]]
 
 __name__ = ('Evolve RP Best Prices')
@@ -11,14 +12,10 @@ local imgui = require 'mimgui'
 local new = imgui.new
 local vk = require 'vkeys'
 
+-- ## переменная для управления отображением главного окна
 local window = {
-    show_main = new.bool(false),
+    show_main = new.bool(false), -- ## изначально false. переключается на true чтобы показать окно
 }
-
--- ## устанавливаем переменным размер окна по умолчанию
-local window_width = 180
-local window_height = 290
-
 
 -- ## устанавливаем общий стиль
 local function setupDarkRedTheme()
@@ -57,6 +54,18 @@ local function setupDarkRedTheme()
     colors[imgui.Col.SeparatorActive] = ImVec4(0.7137, 0.1725, 0.3137, 0.0)
 end
 
+-- ## устанавливаем переменным размер окна по умолчанию
+local window_width = 180
+local window_height = 290
+
+-- ## координаты закусочных и их /gps
+local food_coords = {
+    Blueberry_Pizza = {coords = {203.35, -203.75, 1.58}, gps_cmd = '/gps 9 61'},
+    Financial_Pizza = {coords = {-1807.66, 944.85, 24.89}, gps_cmd = '/gps 9 25'},
+    Island_Cluckin_Bell = {coords = {3163.80, 13.34, 4.11}, gps_cmd = '/gps 9 72'},
+    Spinybed_Burger = {coords = {2171.47, 2795.85, 10.82}, gps_cmd = '/gps 9 55'}
+}
+
 -- ## устанавливаем стиль подкатегорий
 local function setupSubHeaderStyle()
     local style = imgui.GetStyle()
@@ -72,6 +81,31 @@ end
 local function sendGpsCommand(command)
     sampSendChat(command)
 end
+
+-- ## расчитываем координаты ближайшей закусочной
+local function getClosestFood()
+    local px, py, pz = getCharCoordinates(PLAYER_PED) -- ## получаем текущие координаты игрока
+    local closest_cmd, min_dist = nil, math.huge
+
+    for _, data in pairs(food_coords) do -- ## сверяем каждую закусочную с координатами игрока
+        local coords = data.coords
+        -- ## логика вычисления расстояния до закусочной
+        local dx = coords[1] - px
+        local dy = coords[2] - py
+        local dz = coords[3] - pz
+        local dist = math.sqrt(dx * dx + dy * dy + dz * dz) 
+
+        -- ## если текущая закусочная ближе, чем предыдущая минимальная - обновляем минимальное расстояние и команду
+        if dist < min_dist then
+            min_dist = dist
+            closest_cmd = data.gps_cmd
+        end
+    end
+
+    return closest_cmd -- ## возвращаем команду /gps соответствующую ближайшей закусочной
+end
+
+
 
 -- ## выводим окно
 imgui.OnFrame(function()
@@ -90,6 +124,18 @@ end, function()
 
     if window.show_main[0] then
         imgui.Begin(string.upper(__name__), window.show_main, imgui.WindowFlags.NoCollapse) -- ## хеадер окна
+        if imgui.Button('Ближайшая закусочная') then
+            local closest_cmd = getClosestFood()
+            if closest_cmd then
+                sampSendChat(closest_cmd)
+            end
+        end        
+        
+        if imgui.Button('Ближайшая АЗС') then
+            -- Пока кнопка без функционала
+        end
+        
+        
         if imgui.CollapsingHeader('Еда') then
             imgui.Indent(10) -- ## добавляем отступ подкатегории
             setupSubHeaderStyle() -- ## применяем стиль подкатегории
@@ -164,13 +210,14 @@ end, function()
             imgui.Unindent(10)
         end
 
+        -- ## выводим текст в стиле подсказки
         imgui.TextDisabled('Info')
-        if imgui.IsItemHovered() then
-            imgui.BeginTooltip()
-            imgui.PushTextWrapPos(450)
+        if imgui.IsItemHovered() then -- ## показываем если курсор наведен
+            imgui.BeginTooltip() -- ## начало блока подсказки
+            imgui.PushTextWrapPos(450) -- ## минимальная ширина окна текста подсказки
             imgui.TextUnformatted('Authors: ' .. __authors__)
-            imgui.PopTextWrapPos()
-            imgui.EndTooltip()
+            imgui.PopTextWrapPos() -- ## возвращаем текстовую ширину к исходной
+            imgui.EndTooltip() -- ## конец блока
         end
         
         imgui.End()
