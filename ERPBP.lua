@@ -1,13 +1,6 @@
---[[## комментарии
-  * chatgpt мне не помог, пришлось все переписывать самому
-  * комментарии оставил тебе для удобства чтения кода
-  * это на случай если захочешь сам что то добавить/изменить
-  * или же просто подметить что-то себе в будущем
-]]
-
 __name__ = ('Evolve RP Best Prices')
 __authors__ = ('Kegare & !chizusrevenge')
-__description__ = ('можешь добавить краткое описание скрипта сюда если хочешь')
+__description__ = ('Скрипт облегчает поиск самых дешевых и выгодных бизнесов на сервере Evolve RP, таких как закусочные и автозаправки.')
 
 local imgui = require 'mimgui'
 local new = imgui.new
@@ -67,6 +60,16 @@ local food_coords = {
     Spinybed_Burger = {coords = {2171.47, 2795.85, 10.82}, gps_cmd = '/gps 9 55'}
 }
 
+-- ## координаты азс и их /gps
+local gas_coords = {
+    BoneCountry_Gas = {coords = {612.30, 1695.17, 6.86}, gps_cmd = '/gps 9 28'},
+    Island_Gas = {coords = {3209.04, 36.90, 3.99}, gps_cmd = '/gps 9 70'},
+    Dilimore_Gas = {coords = {655.72, -564.95, 16.34}, gps_cmd = '/gps 9 43'},
+    Whestone_Gas = {coords = {-1605.45, -2714.34, 48.22}, gps_cmd = '/gps 9 42'},
+    Shell_Gas = {coords = {2382.34, 508.29, 1.88}, gps_cmd = '/gps 9 69'},
+    ElGuebrabos_Gas = {coords = {-1329.60, 2677.52, 49.94}, gps_cmd = '/gps 9 39'}
+}
+
 -- ## устанавливаем стиль подкатегорий
 local function setupSubHeaderStyle()
     local style = imgui.GetStyle()
@@ -106,6 +109,27 @@ local function getClosestFood()
     return closest_cmd -- ## возвращаем команду /gps соответствующую ближайшей закусочной
 end
 
+-- ## расчитываем координаты ближайшей азс
+local function getClosestGas()
+    local px, py, pz = getCharCoordinates(PLAYER_PED)
+    local closest_gas_cmd, min_gas_dist = nil, math.huge
+
+    for _, data in pairs(gas_coords) do
+        local coords = data.coords
+        local dx = coords[1] - px
+        local dy = coords[2] - py
+        local dz = coords[3] - pz
+        local dist = math.sqrt(dx * dx + dy * dy + dz * dz) 
+
+        if dist < min_gas_dist then
+            min_gas_dist = dist
+            closest_gas_cmd = data.gps_cmd
+        end
+    end
+
+    return closest_gas_cmd -- ## возвращаем команду /gps соответствующую ближайшей АЗС
+end
+
 
 
 -- ## выводим окно
@@ -125,6 +149,11 @@ end, function()
 
     if window.show_main[0] then
         imgui.Begin(string.upper(__name__), window.show_main, imgui.WindowFlags.NoCollapse) -- ## хеадер окна
+        
+        --[[##
+          * КАТЕГОРИЯ ЕДА
+        ##]]
+        
         if imgui.CollapsingHeader('Еда') then
             imgui.Indent(10) -- ## добавляем отступ подкатегории
             setupSubHeaderStyle() -- ## применяем стиль подкатегории
@@ -135,7 +164,7 @@ end, function()
                 imgui.TextWrapped('Цена хот-дога: $375')
                 imgui.TextWrapped('Цена тяжелой закуски: $1125')
                 imgui.TextWrapped('GPS: /gps 9 61')
-                imgui.TextWrapped('Регион: Red County')
+                imgui.TextWrapped('Местоположение: Red County')
 
                 -- ## добавляем кнопку метки
                 if imgui.Button('Установить метку##blueberry') then
@@ -150,7 +179,7 @@ end, function()
                 imgui.TextWrapped('Цена хот-дога: $450')
                 imgui.TextWrapped('Цена тяжелой закуски: $1350')
                 imgui.TextWrapped('GPS: /gps 9 25')
-                imgui.TextWrapped('Регион: San Fierro')
+                imgui.TextWrapped('Местоположение: San Fierro')
 
                 if imgui.Button('Установить метку##financial') then
                     sendGpsCommand('/gps 9 25')
@@ -164,7 +193,7 @@ end, function()
                 imgui.TextWrapped('Цена хот-дога: $525')
                 imgui.TextWrapped('Цена тяжелой закуски: $1575')
                 imgui.TextWrapped('GPS: /gps 9 72')
-                imgui.TextWrapped('Регион: Red County')
+                imgui.TextWrapped('Местоположение: Red County')
 
                 if imgui.Button('Установить метку##island') then
                     sendGpsCommand('/gps 9 72')
@@ -178,7 +207,7 @@ end, function()
                 imgui.TextWrapped('Цена хот-дога: $555')
                 imgui.TextWrapped('Цена тяжелой закуски: $1665')
                 imgui.TextWrapped('GPS: /gps 9 55')
-                imgui.TextWrapped('Регион: Las Venturas')
+                imgui.TextWrapped('Местоположение: Las Venturas')
 
                 if imgui.Button('Установить метку##spinybed') then
                     sendGpsCommand('/gps 9 55')
@@ -187,20 +216,112 @@ end, function()
             end
             imgui.Unindent(10) -- ## возвращаем отступ после подкатегории в исходное положение
         end
+
+        --[[##
+          * КАТЕГОРИЯ АЗС
+        ##]]
         
         setupDarkRedTheme() -- ## возвращаем общий стиль для категорий
         if imgui.CollapsingHeader('АЗС') then
             imgui.Indent(10)
 
-            --[[## 
-              * будущая реализация азс
-            ]]
+            setupSubHeaderStyle() -- ## применяем стиль подкатегории
+            
+            -- ## подкатегория BoneCountry Gas
+            if imgui.CollapsingHeader('BoneCountry Gas') then
+                imgui.Indent(22)
+                imgui.TextWrapped('Цена за литр: $75')
+                imgui.TextWrapped('Цена рем. комплекта: $1500')
+                imgui.TextWrapped('Цена канистры: $750')
+                imgui.TextWrapped('GPS: /gps 9 28')
+                imgui.TextWrapped('Местоположение: Bone County')
 
+                if imgui.Button('Установить метку##bonecountrygas') then
+                    sendGpsCommand('/gps 9 28')
+                end
+                imgui.Unindent(22)
+            end
+            
+            -- ## подкатегория Island Gas
+            if imgui.CollapsingHeader('Island Gas') then
+                imgui.Indent(22)
+                imgui.TextWrapped('Цена за литр: $75')
+                imgui.TextWrapped('Цена рем. комплекта: $1500')
+                imgui.TextWrapped('Цена канистры: $750')
+                imgui.TextWrapped('GPS: /gps 9 70')
+                imgui.TextWrapped('Местоположение: Red County')
+
+                if imgui.Button('Установить метку##islandgas') then
+                    sendGpsCommand('/gps 9 70')
+                end
+                imgui.Unindent(22)
+            end
+            
+            -- ## подкатегория Dilimore Gas
+            if imgui.CollapsingHeader('Dilimore Gas') then
+                imgui.Indent(22)
+                imgui.TextWrapped('Цена за литр: $75')
+                imgui.TextWrapped('Цена рем. комплекта: $1500')
+                imgui.TextWrapped('Цена канистры: $750')
+                imgui.TextWrapped('GPS: /gps 9 43')
+                imgui.TextWrapped('Местоположение: Red County')
+
+                if imgui.Button('Установить метку##dilimoregas') then
+                    sendGpsCommand('/gps 9 43')
+                end
+                imgui.Unindent(22)
+            end
+
+            -- ## подкатегория Whestone Gas
+            if imgui.CollapsingHeader('Whestone Gas') then
+                imgui.Indent(22)
+                imgui.TextWrapped('Цена за литр: $77')
+                imgui.TextWrapped('Цена рем. комплекта: $1540')
+                imgui.TextWrapped('Цена канистры: $770')
+                imgui.TextWrapped('GPS: /gps 9 42')
+                imgui.TextWrapped('Местоположение: Whestone')
+
+                if imgui.Button('Установить метку##whestonegas') then
+                    sendGpsCommand('/gps 9 42')
+                end
+                imgui.Unindent(22)
+            end
+
+            -- ## подкатегория Shell Gas
+            if imgui.CollapsingHeader('Shell Gas') then
+                imgui.Indent(22)
+                imgui.TextWrapped('Цена за литр: $80')
+                imgui.TextWrapped('Цена рем. комплекта: $1600')
+                imgui.TextWrapped('Цена канистры: $800')
+                imgui.TextWrapped('GPS: /gps 9 69')
+                imgui.TextWrapped('Местоположение: Las Venturas')
+
+                if imgui.Button('Установить метку##shellgas') then
+                    sendGpsCommand('/gps 9 69')
+                end
+                imgui.Unindent(22)
+            end
+
+            -- ## подкатегория ElGuebrabos Gas
+            if imgui.CollapsingHeader('ElGuebrabos Gas') then
+                imgui.Indent(22)
+                imgui.TextWrapped('Цена за литр: $85')
+                imgui.TextWrapped('Цена рем. комплекта: $1700')
+                imgui.TextWrapped('Цена канистры: $850')
+                imgui.TextWrapped('GPS: /gps 9 39')
+                imgui.TextWrapped('Местоположение: Tierra Robada')
+
+                if imgui.Button('Установить метку##elguebrabos') then
+                    sendGpsCommand('/gps 9 39')
+                end
+                imgui.Unindent(22)
+            end
             imgui.Unindent(10)
         end
 
         imgui.Unindent(4) -- ## корректировка отступов
         
+        -- ## обработка ближайшей закусочной
         if imgui.Button('Ближайшая закусочная') then
             local closest_cmd = getClosestFood()
             if closest_cmd then
@@ -208,8 +329,12 @@ end, function()
             end
         end        
         
+        -- ## обработка ближайшей азс
         if imgui.Button('Ближайшая АЗС') then
-            -- Пока кнопка без функционала
+            local closest_cmd = getClosestGas()
+            if closest_cmd then
+                sampSendChat(closest_cmd)
+            end
         end
 
         -- ## выводим текст в стиле подсказки
