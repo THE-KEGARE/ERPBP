@@ -165,8 +165,7 @@ local function getClosestGas()
 
     return closest_gas_cmd -- ## возвращаем команду /gps соответствующую ближайшей АЗС
 end
-
---[[## логика центрирования текста ]]
+----------------imgui.CenterText-------------------
 function imgui.CenterText(text, maxWidth)
     local lines = {}
     local currentLine = ""
@@ -191,12 +190,12 @@ function imgui.CenterText(text, maxWidth)
         end
     end
     
-    -- Добавляем последнюю строку
+    --[[## добавляем последнюю строку ]]
     if currentLine ~= "" then
         table.insert(lines, currentLine)
     end
     
-    -- Центрируем и выводим каждую строку
+    --[[## центрируем и выводим каждую строку ]]
     for _, line in ipairs(lines) do
         local calc = imgui.CalcTextSize(line)
         local width = imgui.GetWindowWidth()
@@ -204,24 +203,22 @@ function imgui.CenterText(text, maxWidth)
         imgui.Text(line)
     end
 end
-
+-----------------------imgui.CenteredTextWithLink------------------------------
 function imgui.CenteredTextWithLink(text, linkText, link, maxWidth)
-    -- Рассчитываем размеры текста и ссылки
+    --[[## рассчитываем размеры текста и ссылки ]]
     local fullText = text .. " " .. linkText
     local calcFull = imgui.CalcTextSize(fullText)
     local width = imgui.GetWindowWidth()
     local cursorPosX = (width - calcFull.x) / 2
 
-    -- Устанавливаем позицию курсора для центрирования текста
+    --[[## устанавливаем позицию курсора для центрирования текста ]]
     imgui.SetCursorPosX(cursorPosX)
 
-    -- Отображаем основной текст
+    --[[## отображаем основной текст ]]
     imgui.Text(text .. " ")
-
-    -- Расположим следующий элемент (ссылку) на той же строке
     imgui.SameLine(0, 0)
 
-    -- Добавляем кликабельную ссылку
+    --[[## добавляем гиперссылку ]]
     local tSize = imgui.CalcTextSize(linkText)
     local p = imgui.GetCursorScreenPos()
     local DL = imgui.GetWindowDrawList()
@@ -235,7 +232,7 @@ function imgui.CenteredTextWithLink(text, linkText, link, maxWidth)
     DL:AddText(p, color, linkText)
     DL:AddLine(imgui.ImVec2(p.x, p.y + tSize.y), imgui.ImVec2(p.x + tSize.x, p.y + tSize.y), color)
 end
-
+-------------------imgui.TextColoredRGB-------------------------
 function imgui.TextColoredRGB(text)
     local style = imgui.GetStyle()
     local colors = style.Colors
@@ -276,7 +273,7 @@ function imgui.TextColoredRGB(text)
                 w = w:sub(1, n - 1) .. w:sub(k + 1, #w)
             end
 
-            -- Центрируем текст перед его отрисовкой
+            --[[## центрируем текст перед его отрисовкой ]]
             local textWidth = imgui.CalcTextSize(w).x
             imgui.SetCursorPosX((imgui.GetWindowSize().x - textWidth) / 2)
 
@@ -295,11 +292,16 @@ function imgui.TextColoredRGB(text)
     render_text(text)
 end
 
---[[## рендеринг основного окна ]]
+-------------------------------==[ renderMainFrame ]==--------------------------------
 local renderMainFrame = imgui.OnFrame(
     function() return windowVisible[0] end,
     function()
         setupDarkRedTheme()
+        --[[## getScreenResolution ## imgui.SetNextWindowPos ## imgui.SetNextWindowSize
+          * получаем разрешение экрана
+          * по умолчанию выравниваем окно по центру
+          * применяем размер установленный переменными "window_width" и "window_height"
+        ]]  
         local sw, sh = getScreenResolution()
         imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(492, 400), imgui.Cond.FirstUseEver)
@@ -452,7 +454,7 @@ local renderMainFrame = imgui.OnFrame(
                         end
                         imgui.Unindent(10)
                     end
-                    -- ## кнопка ближайшей закусочной
+                    --[[## кнопка ближайшей закусочной ]]
                     if imgui.Button('Ближайшая АЗС') then
                         local closest_cmd = getClosestGas()
                         if closest_cmd then
@@ -473,11 +475,11 @@ local renderMainFrame = imgui.OnFrame(
                 if imgui.BeginTabItem('Информация') then
                     local originalColor = imgui.GetStyle().Colors[imgui.Col.Text]
                 
-                    -- ## устанавливаем цвет текста как у TextDisabled
+                    --[[## цвет текста как у TextDisabled ]]
                     imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
                     imgui.PopStyleColor()
                     imgui.Dummy(imgui.ImVec2(0, 5))
-                    -- ## выводим текст
+                    --[[## выводим текст]]
                     imgui.CenterText('Авторы скрипта: ' .. __authors__, 300)
                     imgui.TextColoredRGB('{FF0000}благодарят вас за скачивание <3')
                     imgui.Dummy(imgui.ImVec2(0, 5))
