@@ -1,6 +1,6 @@
 __name__ = ('Evolve RP Best Prices')
 __authors__ = ('Kegare & !chizusrevenge')
-__description__ = ('Скрипт облегчает поиск самых дешевых и выгодных бизнесов на сервере Evolve RP, таких как закусочные и автозаправки.')
+__description__ = ('Данный скрипт предназначен для упрощения поиска наиболее дешевых и выгодных для игрока бизнесов на сервере Evolve RP. Он позволяет быстро находить различные бизнесы, такие как закусочные, автозаправочные станции и другие.')
 __update__ = ('Последнее обновление скрипта: 27.08.2024')
 
 local imgui = require 'mimgui'
@@ -165,6 +165,7 @@ local function getClosestGas()
 
     return closest_gas_cmd -- ## возвращаем команду /gps соответствующую ближайшей АЗС
 end
+
 --[[## логика центрирования текста ]]
 function imgui.CenterText(text, maxWidth)
     local lines = {}
@@ -203,6 +204,97 @@ function imgui.CenterText(text, maxWidth)
         imgui.Text(line)
     end
 end
+
+function imgui.CenteredTextWithLink(text, linkText, link, maxWidth)
+    -- Рассчитываем размеры текста и ссылки
+    local fullText = text .. " " .. linkText
+    local calcFull = imgui.CalcTextSize(fullText)
+    local width = imgui.GetWindowWidth()
+    local cursorPosX = (width - calcFull.x) / 2
+
+    -- Устанавливаем позицию курсора для центрирования текста
+    imgui.SetCursorPosX(cursorPosX)
+
+    -- Отображаем основной текст
+    imgui.Text(text .. " ")
+
+    -- Расположим следующий элемент (ссылку) на той же строке
+    imgui.SameLine(0, 0)
+
+    -- Добавляем кликабельную ссылку
+    local tSize = imgui.CalcTextSize(linkText)
+    local p = imgui.GetCursorScreenPos()
+    local DL = imgui.GetWindowDrawList()
+    local col = { 0xFFFF7700, 0xFFFF9900 }
+
+    if imgui.InvisibleButton("##" .. link, tSize) then 
+        os.execute("explorer " .. link) 
+    end
+
+    local color = imgui.IsItemHovered() and col[1] or col[2]
+    DL:AddText(p, color, linkText)
+    DL:AddLine(imgui.ImVec2(p.x, p.y + tSize.y), imgui.ImVec2(p.x + tSize.x, p.y + tSize.y), color)
+end
+
+function imgui.TextColoredRGB(text)
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    local ImVec4 = imgui.ImVec4
+
+    local explode_argb = function(argb)
+        local a = bit.band(bit.rshift(argb, 24), 0xFF)
+        local r = bit.band(bit.rshift(argb, 16), 0xFF)
+        local g = bit.band(bit.rshift(argb, 8), 0xFF)
+        local b = bit.band(argb, 0xFF)
+        return a, r, g, b
+    end
+
+    local getcolor = function(color)
+        if color:sub(1, 6):upper() == 'SSSSSS' then
+            local r, g, b = colors[1].x, colors[1].y, colors[1].z
+            local a = tonumber(color:sub(7, 8), 16) or colors[1].w * 255
+            return ImVec4(r, g, b, a / 255)
+        end
+        local color = type(color) == 'string' and tonumber(color, 16) or color
+        if type(color) ~= 'number' then return end
+        local r, g, b, a = explode_argb(color)
+        return imgui.ImVec4(r / 255, g / 255, b / 255, a / 255)
+    end
+
+    local render_text = function(text_)
+        for w in text_:gmatch('[^\r\n]+') do
+            local text, colors_, m = {}, {}, 1
+            w = w:gsub('{(......)}', '{%1FF}')
+            while w:find('{........}') do
+                local n, k = w:find('{........}')
+                local color = getcolor(w:sub(n + 1, k - 1))
+                if color then
+                    text[#text], text[#text + 1] = w:sub(m, n - 1), w:sub(k + 1, #w)
+                    colors_[#colors_ + 1] = color
+                    m = n
+                end
+                w = w:sub(1, n - 1) .. w:sub(k + 1, #w)
+            end
+
+            -- Центрируем текст перед его отрисовкой
+            local textWidth = imgui.CalcTextSize(w).x
+            imgui.SetCursorPosX((imgui.GetWindowSize().x - textWidth) / 2)
+
+            if text[0] then
+                for i = 0, #text do
+                    imgui.TextColored(colors_[i] or colors[1], (text[i]))
+                    imgui.SameLine(nil, 0)
+                end
+                imgui.NewLine()
+            else
+                imgui.Text((w))
+            end
+        end
+    end
+
+    render_text(text)
+end
+
 --[[## рендеринг основного окна ]]
 local renderMainFrame = imgui.OnFrame(
     function() return windowVisible[0] end,
@@ -210,7 +302,7 @@ local renderMainFrame = imgui.OnFrame(
         setupDarkRedTheme()
         local sw, sh = getScreenResolution()
         imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-        imgui.SetNextWindowSize(imgui.ImVec2(340, 329), imgui.Cond.FirstUseEver)
+        imgui.SetNextWindowSize(imgui.ImVec2(492, 400), imgui.Cond.FirstUseEver)
         if imgui.Begin(string.upper(__name__), windowVisible, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar) then
             if imgui.BeginTabBar('MainTabBar') then
                 ----------------------==[ Закусочные ]==-------------------------
@@ -369,8 +461,47 @@ local renderMainFrame = imgui.OnFrame(
                     end
                     imgui.EndTabItem()
                 end
+
+                if imgui.BeginTabItem('Магазины') then
+                    imgui.EndTabItem()
+                end
+
+                if imgui.BeginTabItem('Настройки') then
+                    imgui.EndTabItem()
+                end
+
+                if imgui.BeginTabItem('Информация') then
+                    local originalColor = imgui.GetStyle().Colors[imgui.Col.Text]
+                
+                    -- ## устанавливаем цвет текста как у TextDisabled
+                    imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
+                    imgui.PopStyleColor()
+                    imgui.Dummy(imgui.ImVec2(0, 5))
+                    -- ## выводим текст
+                    imgui.CenterText('Авторы скрипта: ' .. __authors__, 300)
+                    imgui.TextColoredRGB('{FF0000}благодарят вас за скачивание <3')
+                    imgui.Dummy(imgui.ImVec2(0, 5))
+                    imgui.CenterText(__description__, 400)
+
+                    imgui.Dummy(imgui.ImVec2(0, 5))
+                    
+                    imgui.CenteredTextWithLink("Оригинальный репозиторий:", "GitHub", "https://github.com/THE-KEGARE/ERPBP", 200)
+                    imgui.CenteredTextWithLink("Наш сервер:", "Discord", "https://discord.gg/bRG3jhzDzG", 200)
+                    imgui.CenteredTextWithLink("Если нашли баг:", "Telegram главного разработчика", "https://t.me/apparently_adolf_hitler", 200)
+                    imgui.Dummy(imgui.ImVec2(0, 20))
+
+                    imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
+                    imgui.CenterText('Так как скрипт находится на стадии разработки, возможны недочеты.', 300)
+                    imgui.CenterText('Спасибо за понимание.', 300)
+                    imgui.Dummy(imgui.ImVec2(0, 20))
+                    
+                    imgui.CenterText(__update__, 300)
+                    imgui.PopStyleColor()
+                          
+                    imgui.EndTabItem()
+                end
             
-                imgui.EndTabBar()     
+                imgui.EndTabBar()
                 
                 imgui.End()
             end
@@ -394,30 +525,3 @@ function main()
         end
     end
 end
-
-
-
-
-
---[[
-if imgui.BeginTabItem('Информация') then
-    local originalColor = imgui.GetStyle().Colors[imgui.Col.Text]
-
-    -- ## устанавливаем цвет текста как у TextDisabled
-    imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
-    
-    -- ## рассчитываем и устанавливаем позицию текста внизу окна
-    local footer_height = 20  -- высота блока с текстом
-    imgui.SetCursorPosY(imgui.GetWindowHeight() - footer_height)
-    
-    -- ## выводим текст
-    imgui.CenterText('Авторы: ' .. __authors__, 300)
-    -- imgui.CenterText(__description__, 300)
-    imgui.CenterText(__update__, 300)
-    
-    -- ## восстанавливаем оригинальный цвет текста
-    imgui.PopStyleColor()        
-
-    imgui.EndTabItem()
-end
-]]
