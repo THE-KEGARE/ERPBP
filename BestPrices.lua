@@ -8,12 +8,12 @@ encoding.default = 'CP1251'
 local u8 = encoding.CP1251
 
 script_name("BestPrices")
-script_version("1.1.0-2025-01-03")
+script_version("1.2.0-2025-01-03")
 
 __name__ = u8('Best Prices for Evolve RP')
-__authors__ = u8('Kegare & !chizusrevenge')
+__authors__ = u8('Kegare & chizusrevenge')
 __description__ = u8('Данный скрипт предназначен для упрощения поиска наиболее дешевых и выгодных для игрока бизнесов на сервере Evolve RP. Он позволяет быстро находить различные бизнесы, такие как закусочные, автозаправочные станции и другие.')
-__update__ = u8('Цены актуальны на: 02.01.2025')
+__update__ = u8('Цены актуальны на: 03.01.2025')
 
 ------------------------==[ AutoUpdate (test) ]==------------------------
 local enable_autoupdate = true
@@ -67,20 +67,20 @@ local food_coords = {
 }
 --[[ ## координаты азс и их /gps ]]
 local gas_coords = {
-    BoneCountry_Gas = {coords = {612.30, 1695.17, 6.86}, gps_cmd = '/gps 9 28'},
     Island_Gas = {coords = {3209.04, 36.90, 3.99}, gps_cmd = '/gps 9 70'},
     Dilimore_Gas = {coords = {655.72, -564.95, 16.34}, gps_cmd = '/gps 9 43'},
     Whestone_Gas = {coords = {-1605.45, -2714.34, 48.22}, gps_cmd = '/gps 9 42'},
     Shell_Gas = {coords = {2382.34, 508.29, 1.88}, gps_cmd = '/gps 9 69'},
-    ElGuebrabos_Gas = {coords = {-1329.60, 2677.52, 49.94}, gps_cmd = '/gps 9 39'}
+    ElGuebrabos_Gas = {coords = {-1329.60, 2677.52, 49.94}, gps_cmd = '/gps 9 39'},
+    Julius_Gas = {coords = {2640.25, 1105.48, 10.50}, gps_cmd = '/gps 9 29'},
+    AngelPine_Gas = {coords = {-2244.12, -2560.72, 31.55}, gps_cmd = '/gps 9 41'},
+    Espo_Gas = {coords = {-3048.13, 520.54, 1.81}, gps_cmd = '/gps 9 68'}
 }
 --[[ ## координаты 24/7 и их /gps ]]
 local shop_coords = {
     Creek_247 = {coords = {2885.92, 2452.73, 11.07}, gps_cmd = '/gps 9 63'},
     Sugar_247 = {coords = {2957.25, -1971.52, 1.86}, gps_cmd = '/gps 9 64'},
-    Espo_247 = {coords = {-3067.89, 521.27, 1.25}, gps_cmd = '/gps 9 65'},
-    EmeraldIsle_247 = {coords = {2189.21, 2469.58, 11.24}, gps_cmd = '/gps 9 36'},
-    RedsandsWest_247 = {coords = {1600.49, 2220.65, 11.06}, gps_cmd = '/gps 9 16'}
+    Espo_247 = {coords = {-3067.89, 521.27, 1.25}, gps_cmd = '/gps 9 65'}
 }
 --[[ ## расчитываем координаты ближайшей закусочной ]]
 local function getClosestFood()
@@ -296,28 +296,33 @@ local renderMainFrame = imgui.OnFrame(
                     local originalColor = imgui.GetStyle().Colors[imgui.Col.Text]
                 
                     imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
+                    imgui.CenterText(u8'Команды:', 300)
                     imgui.PopStyleColor()
-                    imgui.Dummy(imgui.ImVec2(0, 5))
-                    
-                    imgui.CenterText(u8('Авторы скрипта: ' .. __authors__), 300)
-                    imgui.TextColoredRGB(u8'{FF0000}благодарят вас за скачивание <3')
-                    imgui.Dummy(imgui.ImVec2(0, 5))
-                    imgui.CenterText(__description__, 400)
 
-                    imgui.Dummy(imgui.ImVec2(0, 5))
+                    imgui.CenterText(u8'/prices - открыть/закрыть главное меню', 300)
+                    imgui.CenterText(u8'/ceat - найти ближайшую закусочную', 300)
+                    imgui.CenterText(u8'/cgas - найти ближайшую АЗС', 300)
+                    imgui.CenterText(u8'/cstore - найти ближайший магазин', 300)
+
+                    imgui.Dummy(imgui.ImVec2(0, 15))
+
+                    imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
+                    imgui.CenterText(u8'Ссылки:', 300)
+                    imgui.PopStyleColor()
                     
                     imgui.CenteredTextWithLink(u8'Оригинальный репозиторий:', u8'GitHub', u8'https://github.com/THE-KEGARE/ERPBP', 200)
                     imgui.CenteredTextWithLink(u8'Наш сервер:', u8'Discord', u8'https://discord.gg/bRG3jhzDzG', 200)
-                    imgui.CenteredTextWithLink(u8'Если нашли баг:', u8'Telegram главного разработчика', u8'https://t.me/apparently_adolf_hitler', 200)
-                    imgui.Dummy(imgui.ImVec2(0, 20))
-
-                    imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
-                    imgui.CenterText(u8'Так как скрипт находится на стадии разработки, возможны недочеты.', 300)
-                    imgui.CenterText(u8'Спасибо за понимание.', 300)
-                    imgui.Dummy(imgui.ImVec2(0, 15))
+                    imgui.CenteredTextWithLink(u8'Если нашли баг:', u8'Telegram', u8'https://t.me/apparently_adolf_hitler', 200)
                     
+                    imgui.Dummy(imgui.ImVec2(0, 30))
+
+                    imgui.CenterText(u8('Авторы скрипта: ' .. __authors__), 300)
+                    imgui.TextColoredRGB(u8'{FF0000}благодарят вас за скачивание <3')
+                    imgui.Dummy(imgui.ImVec2(0, 30))
+                    
+                    imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.TextDisabled])
                     imgui.CenterText(__update__, 300)
-                    imgui.CenterText(u8('Последняя версия скрипта: ' .. thisScript().version), 300)
+                    imgui.CenterText(u8('Последняя версия скрипта: ' .. thisScript().version .. '-alpha'), 400)
                     imgui.PopStyleColor()
                           
                     imgui.EndTabItem()
@@ -330,50 +335,50 @@ local renderMainFrame = imgui.OnFrame(
                         imgui.Indent(10)
                         imgui.TextWrapped(u8'Цена хот-дога: $375')
                         imgui.TextWrapped(u8'Цена тяжелой закуски: $1125')
-                        imgui.TextWrapped(u8'GPS: /gps 9 61')
+                        imgui.TextWrapped(u8'GPS: ' .. food_coords.Blueberry_Pizza.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Red County')
                     
                         if imgui.Button(u8'Установить метку##blueberry') then
-                            sendGpsCommand('/gps 9 61')
+                            sampSendChat(food_coords.Blueberry_Pizza.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
                     --------------------Financial Pizza----------------------
                     if imgui.CollapsingHeader(u8'Financial Pizza') then
                         imgui.Indent(10)
-                        imgui.TextWrapped(u8'Цена хот-дога: $450')
-                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1350')
-                        imgui.TextWrapped(u8'GPS: /gps 9 25')
+                        imgui.TextWrapped(u8'Цена хот-дога: $405')
+                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1215')
+                        imgui.TextWrapped(u8'GPS: ' .. food_coords.Financial_Pizza.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: San Fierro')
                     
                         if imgui.Button(u8'Установить метку##financial') then
-                            sendGpsCommand('/gps 9 25')
+                            sampSendChat(food_coords.Financial_Pizza.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
                     --------------------Island Cluckin Bell----------------------
                     if imgui.CollapsingHeader(u8'Island Cluckin Bell') then
                         imgui.Indent(10)
-                        imgui.TextWrapped(u8'Цена хот-дога: $525')
-                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1575')
-                        imgui.TextWrapped(u8'GPS: /gps 9 72')
+                        imgui.TextWrapped(u8'Цена хот-дога: $375')
+                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1125')
+                        imgui.TextWrapped(u8'GPS: ' .. food_coords.Island_Cluckin_Bell.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Red County')
                     
                         if imgui.Button(u8'Установить метку##island') then
-                            sendGpsCommand('/gps 9 72')
+                            sampSendChat(food_coords.Island_Cluckin_Bell.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
                     --------------------Spinybed Burger----------------------
                     if imgui.CollapsingHeader(u8'Spinybed Burger') then
                         imgui.Indent(10)
-                        imgui.TextWrapped(u8'Цена хот-дога: $555')
-                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1665')
-                        imgui.TextWrapped(u8'GPS: /gps 9 55')
+                        imgui.TextWrapped(u8'Цена хот-дога: $375')
+                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1125')
+                        imgui.TextWrapped(u8'GPS: ' .. food_coords.Spinybed_Burger.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Las Venturas')
                     
                         if imgui.Button(u8'Установить метку##spinybed') then
-                            sendGpsCommand('/gps 9 55')
+                            sampSendChat(food_coords.Spinybed_Burger.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
@@ -390,29 +395,17 @@ local renderMainFrame = imgui.OnFrame(
 
                 -----------------------==[ Заправки ]==---------------------------
                 if imgui.BeginTabItem(u8'Автозаправочные станции') then
-                    if imgui.CollapsingHeader(u8'BoneCountry Gas') then
-                        imgui.Indent(10)
-                        imgui.TextWrapped(u8'Цена за литр: $75')
-                        imgui.TextWrapped(u8'Цена рем. комплекта: $1500')
-                        imgui.TextWrapped(u8'GPS: /gps 9 28')
-                        imgui.TextWrapped(u8'Местоположение: Bone County')
-                    
-                        if imgui.Button(u8'Установить метку##bonecountrygas') then
-                            sendGpsCommand('/gps 9 28')
-                        end
-                        imgui.Unindent(10)
-                    end
-                    ---------------------------Island Gas----------------------------
-                    if imgui.CollapsingHeader(u8'Island Gas') then
+                    ---------------------------Julius Gas----------------------------
+                    if imgui.CollapsingHeader(u8'Julius Gas') then
                         imgui.Indent(10)
                         imgui.TextWrapped(u8'Цена за литр: $75')
                         imgui.TextWrapped(u8'Цена рем. комплекта: $1500')
                         imgui.TextWrapped(u8'Цена канистры: $750')
-                        imgui.TextWrapped(u8'GPS: /gps 9 70')
-                        imgui.TextWrapped(u8'Местоположение: Red County')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.Julius_Gas.gps_cmd)
+                        imgui.TextWrapped(u8'Местоположение: Las Venturas')
                     
-                        if imgui.Button(u8'Установить метку##islandgas') then
-                            sendGpsCommand('/gps 9 70')
+                        if imgui.Button(u8'Установить метку##juliusgas') then
+                            sampSendChat(gas_coords.Julius_Gas.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
@@ -422,25 +415,25 @@ local renderMainFrame = imgui.OnFrame(
                         imgui.TextWrapped(u8'Цена за литр: $75')
                         imgui.TextWrapped(u8'Цена рем. комплекта: $1500')
                         imgui.TextWrapped(u8'Цена канистры: $750')
-                        imgui.TextWrapped(u8'GPS: /gps 9 43')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.Dilimore_Gas.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Red County')
                     
                         if imgui.Button(u8'Установить метку##dilimoregas') then
-                            sendGpsCommand('/gps 9 43')
+                            sampSendChat(gas_coords.Dilimore_Gas.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
-                    ---------------------------Whestone Gas----------------------------
-                    if imgui.CollapsingHeader(u8'Whestone Gas') then
-                        imgui.Indent(10)              
-                        imgui.TextWrapped(u8'Цена за литр: $77')
-                        imgui.TextWrapped(u8'Цена рем. комплекта: $1540')
-                        imgui.TextWrapped(u8'Цена канистры: $770')
-                        imgui.TextWrapped(u8'GPS: /gps 9 42')
-                        imgui.TextWrapped(u8'Местоположение: Whestone')
+                    ---------------------------Espo Gas----------------------------
+                    if imgui.CollapsingHeader(u8'Espo Gas') then
+                        imgui.Indent(10)
+                        imgui.TextWrapped(u8'Цена за литр: $75')
+                        imgui.TextWrapped(u8'Цена рем. комплекта: $1500')
+                        imgui.TextWrapped(u8'Цена канистры: $750')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.Espo_Gas.gps_cmd)
+                        imgui.TextWrapped(u8'Местоположение: San Fierro')
                     
-                        if imgui.Button(u8'Установить метку##whestonegas') then
-                            sendGpsCommand('/gps 9 42')
+                        if imgui.Button(u8'Установить метку##espo') then
+                            sampSendChat(gas_coords.Espo_Gas.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
@@ -450,29 +443,58 @@ local renderMainFrame = imgui.OnFrame(
                         imgui.TextWrapped(u8'Цена за литр: $80')
                         imgui.TextWrapped(u8'Цена рем. комплекта: $1600')
                         imgui.TextWrapped(u8'Цена канистры: $800')
-                        imgui.TextWrapped(u8'GPS: /gps 9 69')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.Shell_Gas.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Las Venturas')
                     
                         if imgui.Button(u8'Установить метку##shellgas') then
-                            sendGpsCommand('/gps 9 69')
+                            sampSendChat(gas_coords.Shell_Gas.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
+                    
                     ---------------------------ElGuebrabos Gas----------------------------
                     if imgui.CollapsingHeader(u8'ElGuebrabos Gas') then
                         imgui.Indent(10)
                         imgui.TextWrapped(u8'Цена за литр: $85')
                         imgui.TextWrapped(u8'Цена рем. комплекта: $1700')
                         imgui.TextWrapped(u8'Цена канистры: $850')
-                        imgui.TextWrapped(u8'GPS: /gps 9 39')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.ElGuebrabos_Gas.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Tierra Robada')
                     
                         if imgui.Button(u8'Установить метку##elguebrabos') then
-                            sendGpsCommand('/gps 9 39')
+                            sampSendChat(gas_coords.ElGuebrabos_Gas.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
+                    ---------------------------AngelPine Gas----------------------------
+                    if imgui.CollapsingHeader(u8'AngelPine Gas') then
+                        imgui.Indent(10)
+                        imgui.TextWrapped(u8'Цена за литр: $88')
+                        imgui.TextWrapped(u8'Цена рем. комплекта: $1760')
+                        imgui.TextWrapped(u8'Цена канистры: $880')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.AngelPine_Gas.gps_cmd)
+                        imgui.TextWrapped(u8'Местоположение: Angel Pine')
                     
+                        if imgui.Button(u8'Установить метку##angelpinegas') then
+                            sampSendChat(gas_coords.AngelPine_Gas.gps_cmd)
+                        end
+                        imgui.Unindent(10)
+                    end
+                    ---------------------------Whestone Gas----------------------------
+                    if imgui.CollapsingHeader(u8'Whestone Gas') then
+                        imgui.Indent(10)              
+                        imgui.TextWrapped(u8'Цена за литр: $88')
+                        imgui.TextWrapped(u8'Цена рем. комплекта: $1760')
+                        imgui.TextWrapped(u8'Цена канистры: $880')
+                        imgui.TextWrapped(u8'GPS: ' .. gas_coords.Whestone_Gas.gps_cmd)
+                        imgui.TextWrapped(u8'Местоположение: Whestone')
+                    
+                        if imgui.Button(u8'Установить метку##whestonegas') then
+                            sampSendChat(gas_coords.Whestone_Gas.gps_cmd)
+                        end
+                        imgui.Unindent(10)
+                    end
+
                     --[[## кнопка ближайшей АЗС ]]
                     if imgui.Button(u8'Ближайшая АЗС') then
                         local closest_cmd = getClosestGas()
@@ -487,19 +509,19 @@ local renderMainFrame = imgui.OnFrame(
                 if imgui.BeginTabItem(u8'Магазины') then
                     if imgui.CollapsingHeader(u8'Creek 24-7') then
                         imgui.Indent(10)
-                        imgui.TextWrapped(u8'Номер телефона: $625')
-                        imgui.TextWrapped(u8'Справочник: $875')
-                        imgui.TextWrapped(u8'Аптечка: $3125')
-                        imgui.TextWrapped(u8'Обезболивающее: $1875')
-                        imgui.TextWrapped(u8'Рация: $3125')
-                        imgui.TextWrapped(u8'Балончик: $625')
-                        imgui.TextWrapped(u8'Отмычка: $250')
-                        imgui.TextWrapped(u8'Устройство взлома: $625')
-                        imgui.TextWrapped(u8'GPS: /gps 9 63')
+                        imgui.TextWrapped(u8'Номер телефона: $1000')
+                        imgui.TextWrapped(u8'Справочник: $1400')
+                        imgui.TextWrapped(u8'Аптечка: $5000')
+                        imgui.TextWrapped(u8'Обезболивающее: $3000')
+                        imgui.TextWrapped(u8'Рация: $5000')
+                        imgui.TextWrapped(u8'Балончик: $1000')
+                        imgui.TextWrapped(u8'Отмычка: $400')
+                        imgui.TextWrapped(u8'Устройство взлома: $1000')
+                        imgui.TextWrapped(u8'GPS: ' .. shop_coords.Creek_247.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Las Venturas')
                     
                         if imgui.Button(u8'Установить метку##creek247') then
-                            sendGpsCommand('/gps 9 63')
+                            sampSendChat(shop_coords.Creek_247.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
@@ -514,11 +536,11 @@ local renderMainFrame = imgui.OnFrame(
                         imgui.TextWrapped(u8'Балончик: $625')
                         imgui.TextWrapped(u8'Отмычка: $250')
                         imgui.TextWrapped(u8'Устройство взлома: $625')
-                        imgui.TextWrapped(u8'GPS: /gps 9 64')
+                        imgui.TextWrapped(u8'GPS: ' .. shop_coords.Sugar_247.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: Los Santos')
                     
                         if imgui.Button(u8'Установить метку##sugar247') then
-                            sendGpsCommand('/gps 9 64')
+                            sampSendChat(shop_coords.Sugar_247.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
@@ -533,49 +555,11 @@ local renderMainFrame = imgui.OnFrame(
                         imgui.TextWrapped(u8'Балончик: $625')
                         imgui.TextWrapped(u8'Отмычка: $250')
                         imgui.TextWrapped(u8'Устройство взлома: $625')
-                        imgui.TextWrapped(u8'GPS: /gps 9 65')
+                        imgui.TextWrapped(u8'GPS: ' .. shop_coords.Espo_247.gps_cmd)
                         imgui.TextWrapped(u8'Местоположение: San Fierro')
                     
                         if imgui.Button(u8'Установить метку##espo247') then
-                            sendGpsCommand('/gps 9 65')
-                        end
-                        imgui.Unindent(10)
-                    end
-
-                    if imgui.CollapsingHeader(u8'Emerald Isle 24/7') then
-                        imgui.Indent(10)
-                        imgui.TextWrapped(u8'Номер телефона: $775')
-                        imgui.TextWrapped(u8'Справочник: $1085')
-                        imgui.TextWrapped(u8'Аптечка: $3875')
-                        imgui.TextWrapped(u8'Обезболивающее: $2325')
-                        imgui.TextWrapped(u8'Рация: $3875')
-                        imgui.TextWrapped(u8'Балончик: $775')
-                        imgui.TextWrapped(u8'Отмычка: $310')
-                        imgui.TextWrapped(u8'Устройство взлома: $775')
-                        imgui.TextWrapped(u8'GPS: /gps 9 36')
-                        imgui.TextWrapped(u8'Местоположение: Las Venturas')
-                    
-                        if imgui.Button(u8'Установить метку##emeraldisle247') then
-                            sendGpsCommand('/gps 9 36')
-                        end
-                        imgui.Unindent(10)
-                    end
-
-                    if imgui.CollapsingHeader(u8'Redsands-West 24/7') then
-                        imgui.Indent(10)
-                        imgui.TextWrapped(u8'Номер телефона: $875')
-                        imgui.TextWrapped(u8'Справочник: $1225')
-                        imgui.TextWrapped(u8'Аптечка: $4375')
-                        imgui.TextWrapped(u8'Обезболивающее: $2625')
-                        imgui.TextWrapped(u8'Рация: $4375')
-                        imgui.TextWrapped(u8'Балончик: $875')
-                        imgui.TextWrapped(u8'Отмычка: $350')
-                        imgui.TextWrapped(u8'Устройство взлома: $875')
-                        imgui.TextWrapped(u8'GPS: /gps 9 16')
-                        imgui.TextWrapped(u8'Местоположение: Las Venturas')
-                    
-                        if imgui.Button(u8'Установить метку##redsandswest247') then
-                            sendGpsCommand('/gps 9 16')
+                            sampSendChat(shop_coords.Espo_247.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
@@ -628,10 +612,40 @@ function main()
         end
     end)
     
-    -- регистрируем команду чата с проверкой на меню
+    -- регистрируем команды чата с проверкой на меню
     sampRegisterChatCommand('prices', function()
         if not isPauseMenuActive() and not sampIsScoreboardOpen() then
             windowVisible[0] = not windowVisible[0]
+        end
+    end)
+
+    -- команда для поиска ближайшей закусочной
+    sampRegisterChatCommand('ceat', function()
+        if not isPauseMenuActive() and not sampIsScoreboardOpen() then
+            local closest_cmd = getClosestFood()
+            if closest_cmd then
+                sampSendChat(closest_cmd)
+            end
+        end
+    end)
+
+    -- команда для поиска ближайшей АЗС
+    sampRegisterChatCommand('cgas', function()
+        if not isPauseMenuActive() and not sampIsScoreboardOpen() then
+            local closest_cmd = getClosestGas()
+            if closest_cmd then
+                sampSendChat(closest_cmd)
+            end
+        end
+    end)
+
+    -- команда для поиска ближайшего магазина
+    sampRegisterChatCommand('cstore', function()
+        if not isPauseMenuActive() and not sampIsScoreboardOpen() then
+            local closest_cmd = getClosestShop()
+            if closest_cmd then
+                sampSendChat(closest_cmd)
+            end
         end
     end)
 
@@ -695,9 +709,9 @@ function applyDarkRedTheme()
     imgui.GetStyle().Colors[imgui.Col.CheckMark] = imgui.ImVec4(1.00, 1.00, 1.00, 1.00)
     imgui.GetStyle().Colors[imgui.Col.SliderGrab] = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
     imgui.GetStyle().Colors[imgui.Col.SliderGrabActive] = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Button] = imgui.ImVec4(0.7, 0.10, 0.25, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonHovered] = imgui.ImVec4(0.76, 0.18, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonActive] = imgui.ImVec4(0.78, 0.20, 0.35, 1.0)
+    imgui.GetStyle().Colors[imgui.Col.Button] = imgui.ImVec4(0.92, 0.18, 0.29, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ButtonHovered] = imgui.ImVec4(0.96, 0.26, 0.36, 1.00)
+    imgui.GetStyle().Colors[imgui.Col.ButtonActive] = imgui.ImVec4(0.98, 0.33, 0.42, 1.00)
     imgui.GetStyle().Colors[imgui.Col.Header] = imgui.ImVec4(0.08, 0.08, 0.08, 1.00)
     imgui.GetStyle().Colors[imgui.Col.HeaderHovered] = imgui.ImVec4(0.14, 0.14, 0.14, 1.00)
     imgui.GetStyle().Colors[imgui.Col.HeaderActive] = imgui.ImVec4(0.16, 0.16, 0.16, 1.00)
