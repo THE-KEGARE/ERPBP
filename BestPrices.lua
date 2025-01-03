@@ -343,19 +343,6 @@ local renderMainFrame = imgui.OnFrame(
                         end
                         imgui.Unindent(10)
                     end
-                    --------------------Financial Pizza----------------------
-                    if imgui.CollapsingHeader(u8'Financial Pizza') then
-                        imgui.Indent(10)
-                        imgui.TextWrapped(u8'Цена хот-дога: $405')
-                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1215')
-                        imgui.TextWrapped(u8'GPS: ' .. food_coords.Financial_Pizza.gps_cmd)
-                        imgui.TextWrapped(u8'Местоположение: San Fierro')
-                    
-                        if imgui.Button(u8'Установить метку##financial') then
-                            sampSendChat(food_coords.Financial_Pizza.gps_cmd)
-                        end
-                        imgui.Unindent(10)
-                    end
                     --------------------Island Cluckin Bell----------------------
                     if imgui.CollapsingHeader(u8'Island Cluckin Bell') then
                         imgui.Indent(10)
@@ -379,6 +366,19 @@ local renderMainFrame = imgui.OnFrame(
                     
                         if imgui.Button(u8'Установить метку##spinybed') then
                             sampSendChat(food_coords.Spinybed_Burger.gps_cmd)
+                        end
+                        imgui.Unindent(10)
+                    end
+                    --------------------Financial Pizza----------------------
+                    if imgui.CollapsingHeader(u8'Financial Pizza') then
+                        imgui.Indent(10)
+                        imgui.TextWrapped(u8'Цена хот-дога: $405')
+                        imgui.TextWrapped(u8'Цена тяжелой закуски: $1215')
+                        imgui.TextWrapped(u8'GPS: ' .. food_coords.Financial_Pizza.gps_cmd)
+                        imgui.TextWrapped(u8'Местоположение: San Fierro')
+                    
+                        if imgui.Button(u8'Установить метку##financial') then
+                            sampSendChat(food_coords.Financial_Pizza.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
