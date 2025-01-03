@@ -130,17 +130,17 @@ mimgui_hotkeys: http://www.blast.hk/threads/178867/
 Если вы играете на лаунчере и у вас установлен G-TOOLS, курсор может мерцать.</sub>
 
 <!-- Images -->
-[img-logo]: <src/images/05b76d7eda2.png>
-[img-info-example]: <src/images/mx4WnyU.png>
-[img-snack-example]: <src/images/7LGVlfF.png>
-[img-gas-example]: <src/images/0qU9ra1.png>
-[img-store-example]: <src/images/1Ppl6MS.png>
-[img-tabs-preview]: <src/images/8iZYNv7.png>
-[img-tabs-content]: <src/images/oqg7sz7.png>
-[img-hotkey]: <src/images/mjrzW58.png>
-[img-hotkey-set]: <src/images/SUMxAbr.png>
-[img-closest-button]: <src/images/ddisPDWSg3.gif>
-[img-closest-cmd]: <scr/images/72zdcDyZk5.gif>
+[img-logo]: <src/images/logo/05b76d7eda2.png>
+[img-info-example]: <src/images/examples/mx4WnyU.png>
+[img-snack-example]: <src/images/examples/7LGVlfF.png>
+[img-gas-example]: <src/images/examples/0qU9ra1.png>
+[img-store-example]: <src/images/examples/1Ppl6MS.png>
+[img-tabs-preview]: <src/images/examples/8iZYNv7.png>
+[img-tabs-content]: <src/images/examples/oqg7sz7.png>
+[img-hotkey]: <src/images/hotkey_examples/mjrzW58.png>
+[img-hotkey-set]: <src/images/hotkey_examples/SUMxAbr.png>
+[img-closest-button]: <src/images/usage_gif_examples/ddisPDWSg3.gif>
+[img-closest-cmd]: <src/images/usage_gif_examples/72zdcDyZk5.gif>
 
 <!-- URLs -->
 [url-ml]: <https://www.blast.hk/moonloader/>
