@@ -2,43 +2,44 @@
 
 ![img-logo]
 
-[![Moonloader][img-ml]][url-ml]
+<div align="left">
 
-## Описание
+# Ознакомление
+BestPrices это вспомогательный lua скрипт для сервера Evolve RolePlay, который упрощает поиск самых выгодных бизнесов и позволяет быстро устанавливать GPS-метки к ним.
 
-### Данный скрипт предназначен для упрощения поиска наиболее дешевых и выгодных для игрока бизнесов на сервере Evolve RP. Он позволяет быстро находить различные бизнесы, такие как закусочные, автозаправочные станции и другие.
-
-
-
-## Установка:
+## Установка
 
 <div align="left">
 
-1. Установите [MoonLoader](https://www.blast.hk/threads/13305/).
-2. Установите библиотеку [mimgui](https://github.com/THE-FYP/mimgui).
-3. Разархивируйте скрипт в папку `moonloader`.
-4. Активируйте скрипт с помощью клавиши `-` на клавиатуре.
+1. Установите [MoonLoader](https://www.blast.hk/moonloader)
+2. Загрузите архив с актуальной версией скрипта и зависимостями на [странице релизов](https://github.com/THE-KEGARE/ERPBP/releases/tag/v1.1.0)
+3. Разархивируйте содержимое архива в папку `moonloader`
+4. Активируйте меню скрипта при помощи команды `/prices`
 
-<div align="center">
+## Использование
+<details>
+<summary>Интерфейс</summary>
 
 ![img-example]
 
-## Авторство:
+</details>
 
-Kegare — разработка основного кода.
+## Ссылки
+Evolve RolePlay: http://evolve-rp.ru/  
+MoonLoader: http://blast.hk/moonloader/  
+mimgui: http://github.com/THE-FYP/mimgui/  
+mimgui_hotkeys: http://www.blast.hk/threads/178867/
 
-! chizusrevenge — оформление репозитория и помощь в работе с ценами сервера для скрипта.
+## Авторы
+[Kegare](https://github.com/THE-KEGARE/), [chizusrevenge](https://github.com/chizusrevenge)
 
-<sub>Примечание: скрипт находится в стадии разработки, и его функциональность может измениться.</sub>
-
-<div align="left">
-
+<sub>Примечание: скрипт все еще в разработке. Возможны баги и недочеты, а функциональность может измениться.  
+Если вы играете на лаунчере и у вас установлен G-TOOLS, курсор может мерцать.</sub>
 
 <!-- Images -->
 [img-example]: <https://github.com/THE-KEGARE/ERPBP/blob/main/scr/images/menu_example.png>
-[img-logo]: <https://github.com/THE-KEGARE/ERPBP/blob/main/scr/images/logo.png>
-[img-ml]: <https://img.shields.io/badge/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82_%D0%B4%D0%BB%D1%8F_moonloader-re?style=for-the-badge&logo=moonrepo&logoColor=white&color=black>
-
+[img-logo]: <https://github.com/THE-KEGARE/ERPBP/blob/main/scr/images/05b76d7eda2.png>
+[img-ml]: <https://img.shields.io/badge/moonloader-000000?style=flat&logo=lua&link=http%3A%2F%2Fblast.hk%2Fmoonloader%2F>
 
 <!-- URLs -->
-[url-ml]: <https://www.blast.hk/threads/13305/>
+[url-ml]: <https://www.blast.hk/moonloader/>
