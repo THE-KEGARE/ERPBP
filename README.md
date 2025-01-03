@@ -10,7 +10,10 @@ BestPrices это вспомогательный lua скрипт для сер�
 <summary>Превью интерфейса главного меню в игре</summary>  
 <br>
 
-![img-example]
+![img-info-example]
+![img-snack-example]
+![img-gas-example]
+![img-store-example]
 </details>
 
 ## Установка
@@ -128,7 +131,10 @@ mimgui_hotkeys: http://www.blast.hk/threads/178867/
 
 <!-- Images -->
 [img-logo]: <scr/images/05b76d7eda2.png>
-[img-example]: <scr/images/menu_example.png>
+[img-info-example]: <scr/images/mx4WnyU.png>
+[img-snack-example]: <scr/images/7LGVlfF.png>
+[img-gas-example]: <scr/images/0qU9ra1.png>
+[img-store-example]: <scr/images/1Ppl6MS.png>
 [img-tabs-preview]: <scr/images/8iZYNv7.png>
 [img-tabs-content]: <scr/images/oqg7sz7.png>
 [img-hotkey]: <scr/images/mjrzW58.png>
