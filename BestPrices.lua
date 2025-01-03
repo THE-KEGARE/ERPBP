@@ -24,7 +24,7 @@ if enable_autoupdate then
     if updater_loaded then
         autoupdate_loaded, Update = pcall(Updater)
         if autoupdate_loaded then
-            Update.json_url = "https://raw.githubusercontent.com/THE-KEGARE/ERPBP/refs/heads/main/version.json?token=GHSAT0AAAAAAC37YGARYCKDP4WJVC52UW6QZ3WL4BA" .. tostring(os.clock())
+            Update.json_url = "https://raw.githubusercontent.com/THE-KEGARE/ERPBP/refs/heads/main/version.json" .. tostring(os.clock())
             Update.prefix = "[" .. string.upper(thisScript().name) .. "]: "
             Update.url = "https://github.com/THE-KEGARE/ERPBP"
         end
