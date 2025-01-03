@@ -8,14 +8,14 @@ encoding.default = 'CP1251'
 local u8 = encoding.CP1251
 
 script_name("BestPrices")
-script_version("1.2.1-2025-01-03")
+script_version("1.2.2-2025-01-03")
 
 __name__ = u8('Best Prices for Evolve RP')
 __authors__ = u8('Kegare & chizusrevenge')
 __description__ = u8('Данный скрипт предназначен для упрощения поиска наиболее дешевых и выгодных для игрока бизнесов на сервере Evolve RP. Он позволяет быстро находить различные бизнесы, такие как закусочные, автозаправочные станции и другие.')
 __update__ = u8('Цены актуальны на: 03.01.2025')
 
-------------------------==[ AutoUpdate (test) ]==------------------------
+------------------------==[ AutoUpdate ]==------------------------
 local enable_autoupdate = true
 local autoupdate_loaded = false
 local Update = nil
@@ -507,25 +507,7 @@ local renderMainFrame = imgui.OnFrame(
 
                 -----------------------==[ Магазины ]==---------------------------
                 if imgui.BeginTabItem(u8'Магазины') then
-                    if imgui.CollapsingHeader(u8'Creek 24-7') then
-                        imgui.Indent(10)
-                        imgui.TextWrapped(u8'Номер телефона: $1000')
-                        imgui.TextWrapped(u8'Справочник: $1400')
-                        imgui.TextWrapped(u8'Аптечка: $5000')
-                        imgui.TextWrapped(u8'Обезболивающее: $3000')
-                        imgui.TextWrapped(u8'Рация: $5000')
-                        imgui.TextWrapped(u8'Балончик: $1000')
-                        imgui.TextWrapped(u8'Отмычка: $400')
-                        imgui.TextWrapped(u8'Устройство взлома: $1000')
-                        imgui.TextWrapped(u8'GPS: ' .. shop_coords.Creek_247.gps_cmd)
-                        imgui.TextWrapped(u8'Местоположение: Las Venturas')
-                    
-                        if imgui.Button(u8'Установить метку##creek247') then
-                            sampSendChat(shop_coords.Creek_247.gps_cmd)
-                        end
-                        imgui.Unindent(10)
-                    end
-
+                    --------------------Sugar 24-7----------------------
                     if imgui.CollapsingHeader(u8'Sugar 24-7') then
                         imgui.Indent(10)
                         imgui.TextWrapped(u8'Номер телефона: $625')
@@ -544,7 +526,7 @@ local renderMainFrame = imgui.OnFrame(
                         end
                         imgui.Unindent(10)
                     end
-
+                    --------------------Espo 24-7----------------------
                     if imgui.CollapsingHeader(u8'Espo 24-7') then
                         imgui.Indent(10)
                         imgui.TextWrapped(u8'Номер телефона: $625')
@@ -560,6 +542,25 @@ local renderMainFrame = imgui.OnFrame(
                     
                         if imgui.Button(u8'Установить метку##espo247') then
                             sampSendChat(shop_coords.Espo_247.gps_cmd)
+                        end
+                        imgui.Unindent(10)
+                    end
+                    --------------------Creek 24-7----------------------
+                    if imgui.CollapsingHeader(u8'Creek 24-7') then
+                        imgui.Indent(10)
+                        imgui.TextWrapped(u8'Номер телефона: $1000')
+                        imgui.TextWrapped(u8'Справочник: $1400')
+                        imgui.TextWrapped(u8'Аптечка: $5000')
+                        imgui.TextWrapped(u8'Обезболивающее: $3000')
+                        imgui.TextWrapped(u8'Рация: $5000')
+                        imgui.TextWrapped(u8'Балончик: $1000')
+                        imgui.TextWrapped(u8'Отмычка: $400')
+                        imgui.TextWrapped(u8'Устройство взлома: $1000')
+                        imgui.TextWrapped(u8'GPS: ' .. shop_coords.Creek_247.gps_cmd)
+                        imgui.TextWrapped(u8'Местоположение: Las Venturas')
+                    
+                        if imgui.Button(u8'Установить метку##creek247') then
+                            sampSendChat(shop_coords.Creek_247.gps_cmd)
                         end
                         imgui.Unindent(10)
                     end
