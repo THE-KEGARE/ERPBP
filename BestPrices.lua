@@ -8,7 +8,7 @@ encoding.default = 'CP1251'
 local u8 = encoding.UTF8
 
 script_name("BestPrices")
-script_version("02.01.2025")
+script_version("1.1.0-2025-01-03")
 
 __name__ = u8('Best Prices for Evolve RP')
 __authors__ = u8('Kegare & !chizusrevenge')
